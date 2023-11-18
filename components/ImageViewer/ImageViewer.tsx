@@ -4,12 +4,18 @@ import { FC } from 'react';
 
 interface ImageViewerProps {
   placeholderImageSource: any;
+  selectedImage: string | null;
 }
 
 export const ImageViewer: FC<ImageViewerProps> = ({
   placeholderImageSource,
+  selectedImage,
 }) => {
-  return <Image source={placeholderImageSource} style={styles.image} />;
+  const source = selectedImage
+    ? { uri: selectedImage }
+    : placeholderImageSource;
+
+  return <Image source={source} style={styles.image} />;
 };
 
 const styles = StyleSheet.create({

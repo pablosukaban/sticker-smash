@@ -1,13 +1,23 @@
 import { FC } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { View, Pressable, Text, StyleSheet } from 'react-native';
+import {
+  View,
+  Pressable,
+  Text,
+  StyleSheet,
+  PressableProps,
+} from 'react-native';
 
-interface ButtonProps {
+interface ButtonProps extends PressableProps {
   label: string;
   theme?: 'primary' | 'secondary';
 }
 
-export const Button: FC<ButtonProps> = ({ label, theme = 'secondary' }) => {
+export const Button: FC<ButtonProps> = ({
+  label,
+  theme = 'secondary',
+  ...restProps
+}) => {
   //   if (theme === 'primary') {
   //     return <View></View>;
   //   }
@@ -20,8 +30,8 @@ export const Button: FC<ButtonProps> = ({ label, theme = 'secondary' }) => {
       ]}
     >
       <Pressable
-        onPress={() => alert('Pressed')}
         style={[styles.button, theme === 'primary' && styles.buttonPrimary]}
+        {...restProps}
       >
         {theme === 'primary' && (
           <FontAwesome
