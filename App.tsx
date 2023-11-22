@@ -1,7 +1,7 @@
 import * as ImagePicker from 'expo-image-picker';
 import { StatusBar } from 'expo-status-bar';
 import { useRef, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Platform } from 'react-native';
 import { Button } from './components/Button';
 import { CircleButton } from './components/CircleButton';
 import { IconButton } from './components/IconButton/IconButton';
@@ -12,6 +12,7 @@ import { EmojiSticker } from './components/EmojiSticker';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import * as MediaLibrary from 'expo-media-library';
 import { captureRef } from 'react-native-view-shot';
+import domToImage from 'dom-to-image';
 
 const PlaceHolderImage = require('./assets/images/background-image.png');
 
@@ -54,7 +55,27 @@ export default function App() {
   };
 
   const saveImageAsync = async () => {
-    // we will implement this later
+    Platform.OS === 'web' ? saveImageOnWeb() : saveImageOnPhone();
+  };
+
+  const saveImageOnWeb = async () => {
+    try {
+      const dataUrl = await domToImage.toJpeg(imageRef.current, {
+        height: 440,
+        width: 320,
+        quality: 0.95,
+      });
+
+      let a = document.createElement('a');
+      a.download = 'sticker-smash.jpeg';
+      a.href = dataUrl;
+      a.click();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const saveImageOnPhone = async () => {
     try {
       const localUri = await captureRef(imageRef, {
         height: 440,
